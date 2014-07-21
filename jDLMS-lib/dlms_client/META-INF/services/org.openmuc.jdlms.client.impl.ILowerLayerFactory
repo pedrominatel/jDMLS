@@ -1,0 +1,3 @@
+org.openmuc.jdlms.client.hdlc.impl.HdlcClientLayerFactory
+org.openmuc.jdlms.client.ip.impl.TcpClientLayerFactory
+org.openmuc.jdlms.client.ip.impl.UdpClientLayerFactory 

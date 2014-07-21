@@ -1,0 +1,71 @@
+/*
+ * Copyright 2012-13 Fraunhofer ISE
+ *
+ * This file is part of jDLMS.
+ * For more information visit http://www.openmuc.org
+ *
+ * jDLMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * jDLMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with jDLMS.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package org.openmuc.jdlms.client.ip.common;
+
+import java.io.IOException;
+import java.net.SocketAddress;
+import java.util.TooManyListenersException;
+
+import org.openmuc.jdlms.client.communication.IUpperLayer;
+
+/**
+ * Interface used for communicating over an UDP connection
+ * 
+ * @author Karsten Mueller-Bier
+ */
+public interface IUdpLayer {
+	/**
+	 * Register the given IReceivingListener as upper layer client, able to receive WPDUs from this connection.
+	 * 
+	 * This method has to be called on the connecting step, before any CosemPDUs are sent over the particular upper
+	 * layer
+	 * 
+	 * @param key
+	 *            Key to identify this listener
+	 * @param listener
+	 *            The upper layer object to register
+	 * @throws TooManyListenersException
+	 *             If another listener is already registered with the given key
+	 */
+	public void registerUdpListener(ConnectionIdentifier key, IUpperLayer listener) throws TooManyListenersException;
+
+	/**
+	 * Removes the IReceivingListener behind the given key from this connection. Further WPDUs with its WPort as
+	 * destination are discarded.
+	 * 
+	 * Use this method to 'close' the connection to the particular remote server.
+	 * 
+	 * @param key
+	 *            Key of the listener to remove
+	 */
+	public void removeUdpListener(ConnectionIdentifier key);
+
+	/**
+	 * Sends the given bytes to the given remote Smart Meter
+	 * 
+	 * @param data
+	 *            Bytes to sent
+	 * @param destination
+	 *            Address/Port of the remote smart meter
+	 * @throws IOException
+	 */
+	public void sendOverUdp(byte[] data, SocketAddress destination) throws IOException;
+}
